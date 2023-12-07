@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1:3308
--- Tiempo de generación: 25-10-2023 a las 20:34:19
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: Dec 07, 2023 at 12:38 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,59 +18,96 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `proyecto_sena`
+-- Database: `proyecto_sena`
 --
+CREATE DATABASE IF NOT EXISTS `proyecto_sena` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `proyecto_sena`;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `temperaturas`
+-- Table structure for table `dispositivos`
 --
 
-CREATE TABLE `temperaturas` (
-  `id` int(11) NOT NULL,
-  `fecha` date DEFAULT NULL,
-  `temperatura` decimal(5,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `temperaturas`
---
-
-INSERT INTO `temperaturas` (`id`, `fecha`, `temperatura`) VALUES
-(1, '2023-10-01', 25.50),
-(2, '2023-10-02', 26.00),
-(3, '2023-10-03', 24.80),
-(4, '2023-10-04', 23.70),
-(5, '2023-10-05', 22.30),
-(28, '2023-10-11', 22.50),
-(29, '2023-10-12', 23.00),
-(30, '2023-10-13', 21.80);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `unidades`
---
-
-CREATE TABLE `unidades` (
+CREATE TABLE `dispositivos` (
   `id` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
+  `hardware` varchar(50) NOT NULL,
+  `id_unidad` int(11) NOT NULL,
+  `descripcion` varchar(200) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `unidades`
+-- Dumping data for table `dispositivos`
 --
 
-INSERT INTO `unidades` (`id`, `nombre`, `id_usuario`) VALUES
-(1, 'Peces', 1),
-(2, 'Invernaderos', 1);
+INSERT INTO `dispositivos` (`id`, `nombre`, `hardware`, `id_unidad`, `descripcion`, `id_usuario`) VALUES
+(49, 'Temperatura', 'ESP32', 11, '', 3);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios`
+-- Table structure for table `hardware`
+--
+
+CREATE TABLE `hardware` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `hardware`
+--
+
+INSERT INTO `hardware` (`id`, `nombre`) VALUES
+(1, 'ESP32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temperatura11`
+--
+
+CREATE TABLE `temperatura11` (
+  `id_dato` int(11) NOT NULL,
+  `id_dispositivo` int(11) DEFAULT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  `Temperatura` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `temperatura11`
+--
+
+INSERT INTO `temperatura11` (`id_dato`, `id_dispositivo`, `fecha`, `Temperatura`) VALUES
+(1, 49, '2023-01-05 05:00:00', 22.00),
+(2, 49, '2023-01-06 05:00:00', 27.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `unidades`
+--
+
+CREATE TABLE `unidades` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) DEFAULT NULL,
+  `id_usuario` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `unidades`
+--
+
+INSERT INTO `unidades` (`id`, `nombre`, `id_usuario`) VALUES
+(11, 'Acuicultura', 3),
+(13, 'Porcinos', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -78,71 +115,105 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(50) NOT NULL,
   `apellido` varchar(50) NOT NULL,
   `usuario` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `contrasena` varchar(255) NOT NULL
+  `email` varchar(60) NOT NULL,
+  `contrasena` varchar(50) NOT NULL,
+  `rol` varchar(15) NOT NULL,
+  `unidad` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `usuarios`
+-- Dumping data for table `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `usuario`, `email`, `contrasena`) VALUES
-(1, 'Mateo', 'Restrepo Molina', 'Mateo255', 'mateorestrepo35@gmail.com', '12345'),
-(3, 'Julián David', 'Ortega Sanmartín', 'Ortega2023', 'julianortega985@gmail.com', '12345'),
-(4, 'Carlos ', 'Bernal', 'CarloB.', 'carlosandresbernalsaldarriaga@gmail.com', '03032004');
+INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `usuario`, `email`, `contrasena`, `rol`, `unidad`) VALUES
+(3, 'Juan ', 'Vahos', 'jdvahos', 'jdvahos@misena.edu.co', 'admin123', 'admin', ''),
+(5, 'Julian David', 'Ortega Sanmartin', 'Ortega222', 'julianortega985@gmail.com', '12345', 'usuario', 'Acuicultura');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `temperaturas`
+-- Indexes for table `dispositivos`
 --
-ALTER TABLE `temperaturas`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `dispositivos`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombre` (`nombre`,`id_unidad`) USING BTREE;
 
 --
--- Indices de la tabla `unidades`
+-- Indexes for table `hardware`
+--
+ALTER TABLE `hardware`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombre` (`nombre`);
+
+--
+-- Indexes for table `temperatura11`
+--
+ALTER TABLE `temperatura11`
+  ADD PRIMARY KEY (`id_dato`),
+  ADD KEY `id_dispositivo` (`id_dispositivo`);
+
+--
+-- Indexes for table `unidades`
 --
 ALTER TABLE `unidades`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombre` (`nombre`,`id_usuario`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Indices de la tabla `usuarios`
+-- Indexes for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `temperaturas`
+-- AUTO_INCREMENT for table `dispositivos`
 --
-ALTER TABLE `temperaturas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+ALTER TABLE `dispositivos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
--- AUTO_INCREMENT de la tabla `unidades`
+-- AUTO_INCREMENT for table `hardware`
+--
+ALTER TABLE `hardware`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `temperatura11`
+--
+ALTER TABLE `temperatura11`
+  MODIFY `id_dato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `unidades`
 --
 ALTER TABLE `unidades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT de la tabla `usuarios`
+-- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `unidades`
+-- Constraints for table `temperatura11`
+--
+ALTER TABLE `temperatura11`
+  ADD CONSTRAINT `temperatura11_ibfk_1` FOREIGN KEY (`id_dispositivo`) REFERENCES `dispositivos` (`id`);
+
+--
+-- Constraints for table `unidades`
 --
 ALTER TABLE `unidades`
   ADD CONSTRAINT `unidades_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
